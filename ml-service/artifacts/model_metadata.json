@@ -1,0 +1,166 @@
+{
+  "status": "ready",
+  "trainedAt": "2026-11-17T16:18:15.216760+00:00",
+  "bestModel": {
+    "key": "logistic_regression",
+    "name": "Logistic Regression",
+    "rocAuc": 0.605
+  },
+  "models": [
+    {
+      "key": "logistic_regression",
+      "name": "Logistic Regression",
+      "rocAuc": 0.605,
+      "foldScores": [
+        0.614,
+        0.6033,
+        0.6495,
+        0.564,
+        0.5942
+      ],
+      "status": "ok"
+    },
+    {
+      "key": "svm_rbf",
+      "name": "Support Vector Machine",
+      "rocAuc": 0.5995,
+      "foldScores": [
+        0.5967,
+        0.6481,
+        0.6772,
+        0.5505,
+        0.5247
+      ],
+      "status": "ok"
+    },
+    {
+      "key": "gaussian_naive_bayes",
+      "name": "Gaussian Naive Bayes",
+      "rocAuc": 0.598,
+      "foldScores": [
+        0.5687,
+        0.6492,
+        0.6426,
+        0.5712,
+        0.5587
+      ],
+      "status": "ok"
+    },
+    {
+      "key": "gradient_boosting",
+      "name": "Gradient Boosting",
+      "rocAuc": 0.584,
+      "foldScores": [
+        0.5942,
+        0.5563,
+        0.6192,
+        0.5868,
+        0.5633
+      ],
+      "status": "ok"
+    },
+    {
+      "key": "random_forest",
+      "name": "Random Forest",
+      "rocAuc": 0.5509,
+      "foldScores": [
+        0.5484,
+        0.5581,
+        0.5761,
+        0.5643,
+        0.5078
+      ],
+      "status": "ok"
+    }
+  ],
+  "features": [
+    "raid_success_A",
+    "tackle_success_A",
+    "raid_success_B",
+    "tackle_success_B"
+  ],
+  "crossValidation": {
+    "strategy": "StratifiedKFold",
+    "folds": 5,
+    "shuffle": true,
+    "randomState": 42,
+    "scoring": "roc_auc"
+  },
+  "dataset": {
+    "playerRows": 14887,
+    "playerCount": 518,
+    "teamRows": 1220,
+    "teamCount": 12,
+    "matchCount": 610,
+    "datasetMatches": 610,
+    "featureMatches": 610,
+    "labelCounts": {
+      "decisive": 546,
+      "ties": 59,
+      "unknown": 5,
+      "missing": 0,
+      "unmappedWinner": 0
+    },
+    "unmappedWinnerNames": [],
+    "winnerSource": "PKL_matches.result",
+    "trainingRows": 610,
+    "winRate": 0.4278688524590164
+  },
+  "labelPolicy": "Labels come only from PKL_matches.result. '<team> beat <team>' is a win; tied/drawn results are labelled as Team A not winning, matching the notebook's binary winA target. No random labels are ever generated.",
+  "featureEngineering": {
+    "teamForm": "Per-team raid and tackle success for every match, taken from PKL_teams.csv stats.raids.* and stats.tackles.*",
+    "rollingWindow": "Mean of the team's previous 5 matches (shifted so the current match is excluded). Missing history is filled with 0.5 before training.",
+    "notebookCorrection": "The notebook chained groupby().shift().rolling(), so the rolling mean crossed team boundaries at the first rows of each team. This service rolls strictly within each team. Features, candidates and model selection are unchanged; the boundary correction slightly changes CV scores."
+  },
+  "featureWeights": {
+    "basis": "coefficient",
+    "values": {
+      "raid_success_A": 1.2979054082239745,
+      "tackle_success_A": 1.337453560328425,
+      "raid_success_B": -0.37747356181024555,
+      "tackle_success_B": -1.4430404914045938
+    },
+    "intercept": -0.556379604711154
+  },
+  "baselineExample": {
+    "features": {
+      "raid_success_A": 0.52,
+      "tackle_success_A": 0.45,
+      "raid_success_B": 0.52,
+      "tackle_success_B": 0.45
+    },
+    "baseProbabilityA": 0.4687235984716739,
+    "scoreShiftExamples": [
+      {
+        "scoreDiff": 0,
+        "probabilityA": 0.4687235984716739
+      },
+      {
+        "scoreDiff": 5,
+        "probabilityA": 0.6073735290590194
+      },
+      {
+        "scoreDiff": 10,
+        "probabilityA": 0.6807945084610522
+      },
+      {
+        "scoreDiff": -5,
+        "probabilityA": 0.3300736678843283
+      },
+      {
+        "scoreDiff": -10,
+        "probabilityA": 0.25665268848229567
+      }
+    ]
+  },
+  "runtime": {
+    "python": "3.12.5",
+    "sklearn": "1.8.0",
+    "pandas": "2.2.3",
+    "numpy": "2.2.3"
+  },
+  "artifacts": {
+    "modelPath": "model.joblib",
+    "metadataPath": "model_metadata.json"
+  }
+}
